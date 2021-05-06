@@ -1,0 +1,8 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: m1-lincoln
+spec:
+  backend:
+    serviceName: m1-lincoln
+    servicePort: 80
