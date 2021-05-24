@@ -22,3 +22,12 @@ spec:
           imagePullPolicy: Always
           ports:
             - containerPort: 9000
+        - env:
+          - name: DB_DRIVER_CLASS
+            value: org.postgresql.Driver
+          - name: DB_SERVER_URI
+            value: rds-01-lincoln:5432/postgres
+          - name: DB_SERVER_USERNAME
+            value: postgres
+          - name: DB_SERVER_PASSWORD
+            value: lunderodb

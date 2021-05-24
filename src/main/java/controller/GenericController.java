@@ -1,18 +1,18 @@
 package controller;
 
+import model.PizzaModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import service.PizzaService;
 import util.RestClientUtil;
 
 import javax.servlet.http.HttpServletRequest;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/m1-lincoln")
@@ -20,6 +20,9 @@ public class GenericController {
 
     @Autowired
     RestClientUtil restClientUtil;
+
+    @Autowired
+    PizzaService pizzaService;
 
     @GetMapping("")
     public ResponseEntity<?> getFirstMethod(HttpServletRequest request) throws MalformedURLException {
@@ -49,6 +52,45 @@ public class GenericController {
             ResponseEntity responseEntity = restClientUtil.requestByAlias(String.class, "http://" + tag_service, "GET", null, null, null);
 
             return new ResponseEntity<>(responseEntity,
+                    HttpStatus.OK);
+        } catch (Exception e) {
+            return errorResponse(e);
+        }
+    }
+
+    @PostMapping("/pizza")
+    public ResponseEntity<?> savePizza(@RequestBody PizzaModel pizzaModel) {
+
+        try {
+            PizzaModel pizzaResponse = pizzaService.save(pizzaModel);
+
+            return new ResponseEntity<>(pizzaResponse,
+                    HttpStatus.OK);
+        } catch (Exception e) {
+            return errorResponse(e);
+        }
+    }
+
+    @GetMapping("/all")
+    public ResponseEntity<?> getAll() {
+
+        try {
+            List<PizzaModel> pizzaResponse = pizzaService.getAll();
+
+            return new ResponseEntity<>(pizzaResponse,
+                    HttpStatus.OK);
+        } catch (Exception e) {
+            return errorResponse(e);
+        }
+    }
+
+    @GetMapping("/pizza/{id}")
+    public ResponseEntity<?> findById(@PathVariable("id") Long id) {
+
+        try {
+            Optional<PizzaModel> pizzaResponse = pizzaService.get(id);
+
+            return new ResponseEntity<>(pizzaResponse,
                     HttpStatus.OK);
         } catch (Exception e) {
             return errorResponse(e);
